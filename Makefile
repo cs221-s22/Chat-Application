@@ -1,9 +1,9 @@
-PROGS = client server
+PROGS = project05 server
 
 all: $(PROGS)
 
-client: client.c
-	gcc -g -o client client.c
+project05: project05.c
+	gcc -g -o project05 project05.c
   
 server: server.c
 	gcc -g -o server server.c
