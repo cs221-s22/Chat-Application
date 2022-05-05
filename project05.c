@@ -63,7 +63,7 @@ int tcpSocketFunction(char * port){
 	
 }
 
-/////PHILS STUFF//////////////////
+/////TCP MESSENGER//////////////////
 int tcpMessenger(char* port){
 struct addrinfo hints;
     memset(&hints, 0, sizeof(hints));
@@ -309,13 +309,13 @@ int main(int argc, char *argv[]){
 	bool end_loop = false;
 	
 	presence(pfds[1].fd, user, port);
-	int presenceCountdown = 300;
+	int presenceCountdown = 175;
 	while(!end_loop){
 		presenceCountdown--;
 	//	printf("COUNTDOWN NUMBER: %d\n", presenceCountdown );
 		if(presenceCountdown == 0){
 			presence(pfds[1].fd, user, port);
-			presenceCountdown = 300;
+			presenceCountdown = 175;
 		}
 		amount = poll(pfds, nfds, time);		
 		for(int i = 0; i <= 64; i++){
