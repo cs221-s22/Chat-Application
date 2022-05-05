@@ -62,6 +62,33 @@ int tcpSocketFunction(char * port){
 	return tcpSocket;
 	
 }
+
+/////PHILS STUFF//////////////////
+struct addrinfo hints;
+
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+
+    struct addrinfo *res;
+    int rc = getaddrinfo(argv[1], argv[2], &hints, &res);
+    if (rc != 0)
+        printf("%s\n", gai_strerror(rc));
+    int fd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+
+    if (connect(fd, res->ai_addr, res->ai_addrlen) != 0)
+        perror("connect");
+
+    char *msg = "test";
+    int len = strlen(msg) + 1;
+    if (send(fd, msg, len, 0) == -1)
+        perror("send");
+
+    if (close(fd) == -1)
+        perror("close");
+
+    return 0;
+
 //ONLINE PRESENCE FUNCTION///////////////////////////////////////////
 
 void  presence(int udpSocket, char* user, char* port){
