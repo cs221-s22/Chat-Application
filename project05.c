@@ -64,14 +64,14 @@ int tcpSocketFunction(char * port){
 }
 
 /////PHILS STUFF//////////////////
+int tcpMessenger(char* port){
 struct addrinfo hints;
-
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
 
     struct addrinfo *res;
-    int rc = getaddrinfo(argv[1], argv[2], &hints, &res);
+    int rc = getaddrinfo("HOSTNAME", port, &hints, &res);
     if (rc != 0)
         printf("%s\n", gai_strerror(rc));
     int fd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
@@ -88,6 +88,7 @@ struct addrinfo hints;
         perror("close");
 
     return 0;
+  }
 
 //ONLINE PRESENCE FUNCTION///////////////////////////////////////////
 
@@ -113,21 +114,21 @@ void  presence(int udpSocket, char* user, char* port){
 	int length = sizeof(mySockAddr);
 
 	char message[50] = "online: ";
-//	char message2[50] = "offline: ";
+
 	
 	
 	strncat(message, user, strlen(user));
-//	strncat(message2, user, strlen(user));
+
 
 	strcat(message, " ");
 
 	strncat(message, port, strlen(port));
 	
 	strncat(message, "\0", 1);
-//	strncat(message2,"\0", 1);
+
 
 	int s = sendto(udpSocket, (const char *)message, strlen(message), 0, (const struct sockaddr *) &mySockAddr, length);
-//	int s2 = sendto(mySocket, (const char *)message2, strlen(message2), 0, (const struct sockaddr *) &mySockAddr, length);
+
 	
 	if(s == -1){
 		perror("Could not successfully send message");
@@ -195,16 +196,16 @@ int udpSocketFunction(){
 	}
 	
 	int socketOpt1 = setsockopt(mySocket, SOL_SOCKET, SO_BROADCAST, &optionValue, sizeof(optionValue));
-//	if(socketOpt1 == -1){
-	int socketOpt2 = setsockopt(mySocket, SOL_SOCKET, SO_REUSEADDR, &optionValue, sizeof(optionValue));
-	int socketOpt3 = setsockopt(mySocket, SOL_SOCKET, SO_REUSEPORT, &optionValue, sizeof(optionValue));
-	//	if(socketOpt2 == -1){
-	//		perror("could not establish socket options!");
-	//		exit(EXIT_FAILURE);
-	//	}
-			 
-//	}
-//	presence(mySocket, user, port);
+	if(socketOpt1 == -1){
+		int socketOpt2 = setsockopt(mySocket, SOL_SOCKET, SO_REUSEADDR, &optionValue, sizeof(optionValue));
+		if(socketOpt2 == -1){
+			int socketOpt3 = setsockopt(mySocket, SOL_SOCKET, SO_REUSEPORT, &optionValue, sizeof(optionValue));
+			if(socketOpt3 == -1){
+						perror("could not establish socket options!");
+						exit(EXIT_FAILURE);
+					}
+		}
+	}
 
 	return mySocket;
 }
@@ -279,7 +280,6 @@ int main(int argc, char *argv[]){
 
 	char* user = argv[1];
 	char* port = argv[2];
-	char buffer[128];
 
 	
 	//TCP AND UDP SOCKETS BEING MADE
@@ -377,7 +377,7 @@ int main(int argc, char *argv[]){
 					   	strcpy(hosts[totalUsers].userHost, host);
 					   	totalUsers++;
 					   }
- // 
+  
 					 }
 					else{
 					   fprintf(stderr, "getnameinfo: %s\n", gai_strerror(s));
@@ -385,7 +385,13 @@ int main(int argc, char *argv[]){
 					   
 				}
 				else if(pfds[i].fd == myTcp){
-					printf("TCP STUFF\n");
+					int acceptValue = accept(myTcp, NULL, NULL);
+					read(acceptValue, buf, sizeof(buf));
+
+					/////////////////////
+				//	tcpMessenger(port);
+					//////
+					
 				}
 			}
 		}  
