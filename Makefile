@@ -1,5 +1,4 @@
 PROGS = project05 server
-
 all: $(PROGS)
 
 project05: project05.c
