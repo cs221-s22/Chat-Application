@@ -39,7 +39,7 @@ int main(int argc, char *argv[]){
 
 	
 	int length = sizeof(mySockAddr);
-	//
+	
 	
  	char* user = argv[1];
 
@@ -63,14 +63,7 @@ int main(int argc, char *argv[]){
 	int nfds = 64;
 	int time = 100;
 	struct pollfd pfds[64];
-//	pfds[0].fd = mySocket;
-//	pfds[0].events = POLLIN;
 
-//Need fds for stdin/TCP/UDP
-
-	//STDIN_FILENO
-	//UDPFD
-	//TCPFD
 
 	
 
@@ -156,7 +149,6 @@ int main(int argc, char *argv[]){
 
 
 
-//////////////LAB 7 CODE!!/////////////////////////////////////////////////////////////
 	mySocket = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	if(mySocket == -1){
 		perror("Could not create socket");
